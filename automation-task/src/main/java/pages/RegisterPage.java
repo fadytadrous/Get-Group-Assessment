@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class RegisterPage {
     private final WebDriver driver;  // WebDriver instance to interact with the browser
@@ -56,6 +57,9 @@ public class RegisterPage {
     @FindBy(css = "button.cc-dismiss ")
     public WebElement dismissCookieBtn;
 
+    @FindBy(css = "p strong")
+    public WebElement confirmationMsg;
+
     private WebElement findElementByText(String text) {
         // Create a dynamic XPath
         String xpath = String.format("//span[contains(text(), '%s')]", text);
@@ -64,13 +68,7 @@ public class RegisterPage {
         return driver.findElement(By.xpath(xpath));
     }
 
-    public void setInputField(WebElement element, String text) {
-        // Clear the existing text in the input field
-        element.clear();
 
-        // Send the new text
-        element.sendKeys(text);
-    }
 
     public void selectCountry(String countryName) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -83,14 +81,17 @@ public class RegisterPage {
     public void clickSubmit(){
         dismissCookieBtn.click();
         Actions actions = new Actions(driver);
-        actions.scrollToElement(submitBtn).perform();
+        actions.scrollByAmount(0,500).perform();
         // Remove the 'disabled' attribute using JavaScript
         JavascriptExecutor js = (JavascriptExecutor) driver;
+
         js.executeScript("arguments[0].removeAttribute('disabled');", submitBtn);
-        new WebDriverWait(driver, Duration.ofSeconds(10))
+        new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(ExpectedConditions.elementToBeClickable(submitBtn)).click();
 
     }
+
+
 
 
 

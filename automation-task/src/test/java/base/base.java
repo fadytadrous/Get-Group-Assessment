@@ -1,18 +1,18 @@
 package base;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
+import listeners.ExtentTestListener;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
-import org.testng.annotations.AfterMethod;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import pages.ConfirmationPage;
+import pages.LoginPage;
 import pages.RegisterPage;
+import org.testng.ITestContext;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +27,9 @@ public class base {
     protected Properties properties = new Properties();
 
     protected RegisterPage RegisterPage;
+    protected ConfirmationPage ConfirmationPage;
+    protected LoginPage LoginPage;
+
 
     /**
      * Method to set up the WebDriver instance and navigate to the application URL before each test method.
@@ -35,7 +38,7 @@ public class base {
      * For the sake of making all tests in one run under RegisterTests Class BeforeMethod was used
      */
     @BeforeMethod
-    public void setup() throws IOException {
+    public void setup(ITestContext context) throws IOException {
         // Setup WebDriver using WebDriverManager for Chrome
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
@@ -44,6 +47,8 @@ public class base {
 
 
         driver = new ChromeDriver(options);
+        context.setAttribute("WebDriver", driver);
+
 
         // Navigate to the application URL and maximize the window
         driver.get("https://phptravels.net/signup");
@@ -51,8 +56,11 @@ public class base {
         // Load the properties file
         properties.load(Files.newInputStream(Paths.get("src/main/resources/config.properties")));
 
-        // Initialize the RegisterPage object
+        // Initialize the RegisterPage and confirmationPage object
         RegisterPage = new RegisterPage(driver);
+        ConfirmationPage = new ConfirmationPage(driver);
+        LoginPage = new LoginPage(driver);
+
     }
 
     /**
@@ -60,11 +68,11 @@ public class base {
      * Quits the WebDriver session.
      * For the sake of making all tests in one run under searchTest Class AfterMethod was used
      */
-//    @AfterMethod
-//    public void tearDown(){
-//        // Quit the WebDriver session
-//        driver.quit();
-//    }
+    @AfterMethod
+    public void tearDown(){
+        // Quit the WebDriver session
+        driver.quit();
+    }
 
 
 }
