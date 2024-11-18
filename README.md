@@ -21,7 +21,7 @@ The page classes are organized as follows:
 The test data is managed using the `config.properties` file, which is located under the `resources` folder. This file contains all the configurable data such as user credentials, URLs, and other test parameters.
 
 ## Base Class
-The `BaseClass` handles all the setup and teardown tasks required for running the tests. It includes:
+The `base Class` handles all the setup and teardown tasks required for running the tests. It includes:
 - **Driver Instantiation**: Initializes the WebDriver.
 - **`@BeforeMethod` and `@AfterMethod`**: Configures the preconditions and postconditions for each test case.
 
